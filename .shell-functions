@@ -10,21 +10,39 @@
 # TODO: Should really only need to plop once per working copy,
 # so maybe this could be safer? Also should not work in this branch!
 
-function plop() {
-    git restore --source seth-tools .shell-functions ax-kindle-build test.lua
+function interesting_files() {
+    echo ".shell-functions ax-kindle-build test.lua"
 }
+
+function plop() {
+    git restore --source seth-tools $(interesting_files)
+}
+
 function unplop() {
-    git stash
-    git stash --only-untracked
+    echo "git stash --keep-index (and track whether it did anything)"
+    # save reference to current branch
+    git add -A && git commit -mtemp
     git checkout seth-tools
-    git checkout stash -- .
+    # use saved brach here instead of main
+    git restore --source main $(interesting_files)
+    echo "Commit (and push) changes here..."
+    echo "return to original branch"
+    echo "git reset HEAD~ (to drop temp commit)"
+    echo "git stash pop (but only if first stash did something)"
+
+
+    # Unsuccessful attempts below
+    #git stash
+    #git stash --only-untracked
+    #git checkout seth-tools
+    #git checkout stash -- .
     # git stash show --only-untracked | git apply
     # or git checkout stash -- . but somehow do not include any tracked files here
     # maybe git clean -f after?
-    echo "Commit and push changes here..."
-    eval "print -s git stash -u"
-    eval "print -s git stash pop"
-    echo "git stash -u to move any inadvertent untracked files back?"
+    #echo "Commit and push changes here..."
+    #eval "print -s git stash -u"
+    #eval "print -s git stash pop"
+    #echo "git stash -u to move any inadvertent untracked files back?"
 }
 
 function reload-seth-tools {
