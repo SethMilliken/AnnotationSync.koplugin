@@ -1,0 +1,7 @@
+git co kindle-build
+git reset --hard hack/main
+
+export GIT_MERGE_AUTOEDIT=no
+git merge bail-on-sync-without-doc-active
+git merge feature/support-bookmarks
+git merge fix/order-by-page-for-koreader
