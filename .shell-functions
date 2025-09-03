@@ -1,0 +1,35 @@
+# zsh assumed
+#
+# To use:
+#    source .shell-functions
+#    # change to project branch
+#    plop
+#    # to get changes to seth-tools files back to branch
+#    unplop
+#
+# TODO: Should really only need to plop once per working copy,
+# so maybe this could be safer? Also should not work in this branch!
+
+function plop() {
+    git restore --source seth-tools .shell-functions ax-kindle-build test.lua
+}
+function unplop() {
+    git stash
+    git stash --only-untracked
+    git checkout seth-tools
+    git checkout stash -- .
+    # git stash show --only-untracked | git apply
+    # or git checkout stash -- . but somehow do not include any tracked files here
+    # maybe git clean -f after?
+    echo "Commit and push changes here..."
+    eval "print -s git stash -u"
+    eval "print -s git stash pop"
+    echo "git stash -u to move any inadvertent untracked files back?"
+}
+
+function reload-seth-tools {
+    source .shell-functions
+    echo "Reloaded shell functions."
+}
+
+# vim: set ft=zsh:
