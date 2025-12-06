@@ -1,0 +1,5 @@
+ORIGIN="git@github.com:dani84bs/AnnotationSync.koplugin.git"
+BRANCH="main"
+git remote add origin "${ORIGIN}" 2>/dev/null
+git fetch --all
+git rebase origin/${BRANCH}
